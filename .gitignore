@@ -56,3 +56,10 @@ outputs/
 results/
 figures/
 !notebooks/**/figures/*.png
+
+# Internal staging files (already deployed to .github/)
+KASS_Discussion_Labels/
+KASS_Issues/
+KASS_Pull_Template/
+KASS_NOTEBOOK_PRACTICAL_WORKFLOW.md
+KASS_NOTEBOOK_UPDATE_DIRECTIVE.md
