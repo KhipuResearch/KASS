@@ -101,21 +101,6 @@ See [Contributing](#contributing) below. We're particularly interested in extens
 
 ---
 
-## Community & Discussions
-
-Join the KASS community on [GitHub Discussions](../../discussions):
-
-- **📚 [Methodological Questions](../../discussions/categories/methodological-questions)** – Get help with causal inference methods and identification strategies
-- **💻 [Implementation Help](../../discussions/categories/implementation-help)** – Technical support for running notebooks and resolving code issues
-- **🔬 [Show & Tell](../../discussions/categories/show-tell)** – Share analyses you've built using KASS methods
-- **💡 [Feature Requests](../../discussions/categories/feature-requests-ideas)** – Suggest new notebooks, methods, or improvements
-- **📖 [Policy Applications](../../discussions/categories/research-policy-applications)** – Discuss applying causal inference to specific policy domains
-- **🗺️ [Roadmap](../../discussions)** – See what's coming and how to contribute
-
-**Before posting:** Check the [FAQ](../../discussions) and review our [discussion templates](.github/discussions/discussion_templates.md) for guidance on asking effective questions.
-
----
-
 ## The KRL Connection
 
 These notebooks are open-source demonstrations of analytical methods that KRL (Khipu Research Labs) implements at scale. The platform handles:
