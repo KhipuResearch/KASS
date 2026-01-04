@@ -81,6 +81,9 @@ Complete data pipelines from source to final result. If you can't reproduce it, 
 **Honest Limitations**  
 Every method has boundaries. We state them explicitly rather than hoping nobody notices.
 
+**Audit & Remediation**  
+All applied econometrics notebooks underwent independent audit in January 2026 and meet institutional standards for transparency, reproducibility, and methodological rigor. See [CHANGELOG.md](CHANGELOG.md) for remediation details.
+
 These standards aren't about academic posturing—they're about producing analysis that decision-makers can actually rely on.
 
 ---
