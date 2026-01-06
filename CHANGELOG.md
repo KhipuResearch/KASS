@@ -1,5 +1,31 @@
 # KASS Notebook Changelog
 
+## 2026-01-06 - Graceful Degradation for Tiered Features
+
+All notebooks with Professional or Enterprise tier features now implement graceful degradation instead of hard errors for users without the required tier.
+
+### Feature: Subscription/Rental Upsell Messaging
+
+When a notebook tries to import a tier-restricted feature:
+- **Displays clear upgrade banner** with feature description
+- **Shows current vs. required tier** information
+- **Offers upgrade paths**:
+  - Subscription option ($99/mo Enterprise, $49/mo Professional)
+  - Rental option ($29/analysis for Enterprise, $19/session for Professional)
+- **Falls back gracefully** where possible (e.g., community connectors)
+
+### Notebooks Updated
+
+| Notebook | Tier Features | Graceful Handling |
+|----------|---------------|-------------------|
+| NB11 (Heterogeneous Treatment Effects) | `krl_policy.TreatmentEffectEstimator` | ✓ Enterprise fallback |
+| NB14 (Synthetic Control) | `krl_policy.SyntheticControlMethod` | ✓ Enterprise fallback |
+| NB15 (RDD Toolkit) | `FREDFullConnector` | ✓ Professional fallback (→ FREDBasicConnector) |
+| NB20 (Opportunity Zones) | `krl_policy.TreatmentEffectEstimator` | ✓ Enterprise fallback |
+| NB22 (Workforce ROI) | `krl_policy.TreatmentEffectEstimator` | ✓ Enterprise fallback |
+
+---
+
 ## 2026-01-04 - Audit Remediation
 
 All notebooks underwent independent audit and remediation to meet institutional standards for transparency, reproducibility, and methodological rigor.
