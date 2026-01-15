@@ -1,29 +1,41 @@
 # Site settings
 title: KASS
-description: "KHIPU Analytics for Social Science - Production-grade causal inference notebooks for policy analysis"
-url: "https://khipuresearch.github.io"
-baseurl: "/KASS"
+description: Knowledge & Analytics for Social Science - Production-grade causal inference notebooks
+url: https://khipuresearch.github.io
+baseurl: /KASS
 
-# Remote theme
-remote_theme: LeNPaul/Millennial
+# Theme
+theme: just-the-docs
+color_scheme: millennial
 
-# Build settings
-markdown: kramdown
-highlighter: rouge
-permalink: /:title/
+# Search
+search_enabled: true
+search:
+  heading_level: 2
+  previews: 3
+  preview_words_before: 5
+  preview_words_after: 10
+  button: false
 
-# Plugins
-plugins:
-  - jekyll-remote-theme
-  - jekyll-feed
-  - jekyll-sitemap
-  - jekyll-paginate
+# Navigation
+nav_enabled: true
+nav_sort: case_insensitive
+heading_anchors: true
 
-# Pagination
-paginate: 5
-paginate_path: "/blog/page:num/"
+# Back to top
+back_to_top: true
+back_to_top_text: "↑ Top"
 
-# Exclude from build
+# External links
+aux_links:
+  "GitHub":
+    - "https://github.com/KhipuResearch/KASS"
+aux_links_new_tab: true
+
+# Footer
+footer_content: 'KASS is maintained by <a href="https://krlabs.dev">Khipu Research Labs</a>. Apache 2.0 License.'
+
+# Exclude
 exclude:
   - Gemfile
   - Gemfile.lock

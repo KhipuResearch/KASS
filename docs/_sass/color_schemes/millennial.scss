@@ -1,0 +1,35 @@
+// Millennial-inspired minimalist color scheme for KASS
+
+// Typography
+$body-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !default;
+$mono-font-family: "SFMono-Regular", Menlo, Monaco, Consolas, monospace !default;
+$body-line-height: 1.7 !default;
+
+// Base colors - Muted, minimal palette
+$body-background-color: #ffffff !default;
+$body-text-color: #464646 !default;
+$body-heading-color: #303030 !default;
+
+// Links - Millennial blue
+$link-color: #007bff !default;
+
+// Borders - subtle
+$border-color: #e9ecef !default;
+
+// Sidebar / Navigation
+$sidebar-color: #fafafa !default;
+$nav-width: 240px !default;
+
+// Search
+$search-background-color: #ffffff !default;
+$search-result-preview-color: #6c757d !default;
+
+// Code blocks
+$code-background-color: #f5f5f5 !default;
+
+// Buttons
+$btn-primary-color: #007bff !default;
+$base-button-color: #f5f5f5 !default;
+
+// Content width - centered layout
+$content-width: 800px !default;

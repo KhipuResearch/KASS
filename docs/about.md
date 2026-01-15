@@ -1,8 +1,9 @@
 ---
-layout: page
 title: About
-permalink: /about/
+nav_order: 5
 ---
+
+# About KASS
 
 ## The KRL Connection
 
@@ -12,8 +13,6 @@ These notebooks are open-source demonstrations of analytical methods that [KRL (
 - **Model library**: 125+ causal inference models with proper documentation and validation
 - **Collaborative infrastructure**: Team workspaces, audit trails, access controls suitable for government and research use
 - **Reproducibility architecture**: Containerized environments, dependency management, computational reproducibility by default
-
-If you find these notebooks useful but need to run hundreds of analyses rather than one, need institutional-grade infrastructure, or want to eliminate data acquisition overhead, that's what the platform provides.
 
 [Learn more about KRL →](https://krlabs.dev)
 
@@ -33,8 +32,6 @@ If you use these notebooks in your research or operational work:
 }
 ```
 
-And if you publish results derived from these methods, cite the original econometric papers referenced in each notebook.
-
 ---
 
 ## License
@@ -42,23 +39,9 @@ And if you publish results derived from these methods, cite the original econome
 This repository is licensed under the **Apache License 2.0**.
 
 You're free to use, modify, and distribute this code, including for commercial purposes. We only ask that you:
-
 - Maintain proper attribution
 - Share improvements back to the community when feasible
 - Acknowledge methodological sources cited in the notebooks
-
-See [LICENSE](https://github.com/KhipuResearch/KASS/blob/main/LICENSE) for full terms.
-
----
-
-## Acknowledgments
-
-These notebooks build on decades of econometric research and open-source software development. We're grateful to:
-
-- The developers of `statsmodels`, `econml`, `causalml`, and related packages
-- Academic researchers who publish replication materials
-- Government statistical agencies who maintain open data APIs
-- The broader community working toward better policy evidence
 
 ---
 
