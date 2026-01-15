@@ -1,9 +1,8 @@
 ---
+layout: page
 title: Methodology
-nav_order: 4
+permalink: /methodology/
 ---
-
-# Standards & Methodology
 
 Every notebook in KASS adheres to specific quality thresholds. These standards aren't about academic posturing—they're about producing analysis that decision-makers can actually rely on.
 
@@ -75,16 +74,3 @@ See [CHANGELOG.md](https://github.com/KhipuResearch/KASS/blob/main/CHANGELOG.md)
 | Labor Market Intelligence (NB07) | C+ | A- |
 | Opportunity Zone Evaluation (NB20) | B+ | A |
 | Workforce Development ROI (NB22) | B+ | A- |
-
----
-
-## Quality Checklist
-
-Before any notebook is merged, it must satisfy:
-
-- [ ] Clear identification strategy documented
-- [ ] At least 3 robustness checks implemented
-- [ ] All code executes without modification
-- [ ] Limitations section is substantive
-- [ ] Data sources are publicly accessible (or synthetic alternatives provided)
-- [ ] Results interpretation is conservative

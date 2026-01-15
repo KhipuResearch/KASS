@@ -1,9 +1,8 @@
 ---
+layout: page
 title: Getting Started
-nav_order: 2
+permalink: /getting-started/
 ---
-
-# Getting Started
 
 ## Technical Requirements
 
@@ -41,26 +40,16 @@ Start with the method that matches your data structure. Each notebook includes d
 
 **Recommended path:**
 
-1. Start with [Regression Discontinuity](notebooks/regression-discontinuity) for clean identification
-2. Move to [Synthetic Control](notebooks/synthetic-control) for comparative case studies
-3. Explore [Heterogeneous Treatment Effects](notebooks/heterogeneous-treatment-effects) for targeting analysis
+1. Start with Regression Discontinuity for clean identification
+2. Move to Synthetic Control for comparative case studies
+3. Explore Heterogeneous Treatment Effects for targeting analysis
 
 ### If you're conducting policy analysis
 
 Fork the repository, adapt the relevant notebook to your data and question, modify the specifications as needed. The code is structured to make this straightforward.
-
-**Key notebooks for policy work:**
-
-- [Opportunity Zone Evaluation](notebooks/opportunity-zone-evaluation) – Federal program impact assessment
-- [Workforce Development ROI](notebooks/workforce-development-roi) – OMB-compliant cost-benefit analysis
-- [Labor Market Intelligence](notebooks/labor-market-intelligence) – Regional economic analysis
 
 ### If you're evaluating the KRL platform
 
 These notebooks demonstrate core analytical capabilities. The platform adds data connectivity, automated pipelines, collaboration features, and production-grade infrastructure around these methods.
 
 [Learn more about KRL →](https://krlabs.dev)
-
-### If you're contributing improvements
-
-See [Contributing](contributing) for detailed guidelines, code style requirements, and review process.

@@ -1,0 +1,29 @@
+# Site settings
+menu:
+  - title: Home
+    url: /
+  - title: Notebooks
+    url: /notebooks
+  - title: Methodology
+    url: /methodology
+  - title: Getting Started
+    url: /getting-started
+  - title: About
+    url: /about
+
+# Social media
+social:
+  - title: github
+    url: https://github.com/KhipuResearch/KASS
+
+# Sharing settings
+sharing:
+  twitter: false
+  facebook: false
+  linkedin: true
+
+# Analytics (optional)
+# google_analytics: UA-XXXXXXXX-X
+
+# Comments (optional)
+# disqus: your-disqus-shortname

@@ -1,10 +1,7 @@
 ---
+layout: page
 title: About
-nav_order: 7
----
-
-# About KASS
-
+permalink: /about/
 ---
 
 ## The KRL Connection
