@@ -47,12 +47,12 @@ View the fully rendered notebooks with all outputs, visualizations, and results:
 
 | Notebook | Method | View |
 |----------|--------|------|
-| Heterogeneous Treatment Effects | Causal Forests, Double ML | [View Demo →](https://bcdelodx.github.io/KASS/Heterogeneous-Treatment-Effects.html) |
-| Synthetic Control Policy Lab | Synthetic Control Method | [View Demo →](https://bcdelodx.github.io/KASS/Synthetic-Control-Policy-Lab.html) |
-| Regression Discontinuity Toolkit | RDD, Bandwidth Selection | [View Demo →](https://bcdelodx.github.io/KASS/Regression-Discontinuity-Toolkit.html) |
-| Labor Market Intelligence | BLS/Census Integration | [View Demo →](https://bcdelodx.github.io/KASS/Labor-Market-Intelligence.html) |
-| Opportunity Zone Evaluation | DiD, Synthetic Controls | [View Demo →](https://bcdelodx.github.io/KASS/Opportunity-Zone-Evaluation.html) |
-| Workforce Development ROI | Cost-Benefit Analysis | [View Demo →](https://bcdelodx.github.io/KASS/Workforce-Development-ROI.html) |
+| Heterogeneous Treatment Effects | Causal Forests, Double ML | [View Demo →](https://khipuresearch.github.io/KASS/Heterogeneous-Treatment-Effects.html) |
+| Synthetic Control Policy Lab | Synthetic Control Method | [View Demo →](https://khipuresearch.github.io/KASS/Synthetic-Control-Policy-Lab.html) |
+| Regression Discontinuity Toolkit | RDD, Bandwidth Selection | [View Demo →](https://khipuresearch.github.io/KASS/Regression-Discontinuity-Toolkit.html) |
+| Labor Market Intelligence | BLS/Census Integration | [View Demo →](https://khipuresearch.github.io/KASS/Labor-Market-Intelligence.html) |
+| Opportunity Zone Evaluation | DiD, Synthetic Controls | [View Demo →](https://khipuresearch.github.io/KASS/Opportunity-Zone-Evaluation.html) |
+| Workforce Development ROI | Cost-Benefit Analysis | [View Demo →](https://khipuresearch.github.io/KASS/Workforce-Development-ROI.html) |
 
 ### Causal Inference Methods
 
