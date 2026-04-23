@@ -1,0 +1,166 @@
+# policy/ci-authority.yaml
+# What CI may do, what it may not do, and what it is *expected* to do but
+# currently does not do. Source of truth: .github/workflows/*.yml and SPEC.md.
+
+version: 1
+repository: KASS
+
+evidence:
+  spec: SPEC.md
+  spec_sections:
+    - "SPEC.md §6.4 (Documentation Site build)"
+    - "SPEC.md §6.5 (Output Regeneration — manual)"
+    - "SPEC.md §7.3 (Stale-Bot Tuning)"
+    - "SPEC.md §7.4 (Issue Auto-Labelling)"
+    - "SPEC.md §11.3 (Enforcement — none automated)"
+    - "SPEC.md §13 (Testing Strategy — no tests)"
+    - "SPEC.md §14.1 (Deployed Artefacts)"
+
+workflows_present:
+
+  - name: pages
+    path: ".github/workflows/pages.yml"
+    triggers:
+      - "push to main"
+      - "workflow_dispatch"
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel_in_progress: false
+    jobs:
+      - name: build
+        runner: ubuntu-latest
+        steps:
+          - "actions/checkout@v4"
+          - "ruby/setup-ruby@v1 (ruby-version: 3.2, working-directory: docs)"
+          - "bundle install (in docs/)"
+          - "actions/configure-pages@v4"
+          - "bundle exec jekyll build --baseurl /KASS (JEKYLL_ENV=production)"
+          - "actions/upload-pages-artifact@v3 (path: docs/_site)"
+      - name: deploy
+        runner: ubuntu-latest
+        needs: [build]
+        environment: github-pages
+        steps:
+          - "actions/deploy-pages@v4"
+    authority:
+      may_deploy_to: "GitHub Pages environment `github-pages` only"
+      may_publish_package: false
+      may_push_to_main: false
+      may_open_pr: false
+      may_create_release: false
+      may_write_secrets: false
+
+  - name: issue-management
+    path: ".github/workflows/issue-management.yml"
+    purpose: "Auto-label issues by method/domain keywords; welcome first-time contributors; remove `needs-triage`."
+    authority:
+      may_modify: ["issue labels", "issue comments"]
+      may_not_modify: ["code", "workflows", "docs"]
+
+  - name: stale
+    path: ".github/workflows/stale.yml"
+    purpose: "Close inactive issues (30d stale + 14d close) and PRs (45d stale + 14d close)."
+    exempt_labels:
+      - priority-urgent
+      - priority-high
+      - in-progress
+      - blocked
+      - good-first-issue
+      - help-wanted
+      - enhancement
+    exempt_all_milestones: true
+    evidence: "SPEC.md §7.3, .github/workflows/stale.yml"
+    authority:
+      may_modify: ["issue/PR state", "issue/PR comments"]
+      may_not_modify: ["code", "workflows", "docs"]
+
+workflows_absent_but_referenced:
+
+  - name: tests
+    rationale: "No test suite exists (SPEC.md §13). See tests/README.md."
+    calibration: <TOKEN_TBD::wire-test-workflow>
+
+  - name: nbconvert-render-demos
+    rationale: >
+      notebook_results/*.html and docs/demos/*.html are regenerated
+      manually. Timestamps may drift from notebook source between
+      regenerations (SPEC.md §6.5, §16.3).
+    calibration: <TOKEN_TBD::wire-nbconvert-workflow>
+
+  - name: link-check
+    rationale: >
+      README and Jekyll pages reference an external personal-account host
+      (bcdelodx.github.io) and placeholder Stripe Payment Links
+      (CHANGELOG.md:13-17) that would benefit from automated link health
+      checks. See DECISIONS/0003-pricing-url-conflict.md §5.2 item 5.
+    calibration: <TOKEN_TBD::wire-link-check-workflow>
+
+  - name: dependency-audit
+    rationale: >
+      SECURITY.md:62 recommends `pip-audit`; no workflow wires it today
+      (SPEC.md §11.3, §16.7). There is also no dependency manifest for it
+      to scan (ADR-0002).
+    calibration: <TOKEN_TBD::wire-pip-audit-workflow>
+
+  - name: secret-scan
+    rationale: >
+      No automated secret-scanning (gitleaks / trufflehog / GitHub
+      Advanced Security) is wired today (policy/secrets.yaml:prohibited).
+    calibration: <TOKEN_TBD::wire-secret-scan-workflow>
+
+  - name: notebook-diff-guard
+    rationale: >
+      CONTRIBUTING.md:271-272 requires `jupyter nbconvert
+      --ClearOutputPreprocessor.enabled=True --inplace` before commit to
+      avoid dirty diffs; no workflow enforces this.
+    calibration: <TOKEN_TBD::wire-notebook-diff-guard>
+
+forbidden_authorities:
+  # Things no workflow may do, today or tomorrow, without a new ADR.
+  - "Push directly to main (all changes via PR)."
+  - "Write to repository secrets from workflow code."
+  - "Merge PRs automatically without human approval."
+  - "Publish any Python package to PyPI (repo is not a package — SPEC.md §1)."
+  - "Execute notebooks end-to-end in CI while KRL_DEV_PATH is unavailable
+    (would fail per ADR-0001)."
+
+required_authorities_on_every_workflow:
+  minimum_permissions: "read-all by default; explicit `permissions:` block must enumerate every elevated scope."
+  pinned_actions: <TOKEN_TBD::pin-actions-to-sha>   # true = pin by SHA; false = allow @vN tags (current state)
+  top_level_timeout_minutes: <TOKEN_TBD::top-level-timeout-minutes>
+
+deployment_environments:
+  github-pages:
+    used_by: pages
+    secrets: none   # OIDC via id-token; no long-lived tokens
+    protection_rules: <TOKEN_TBD::pages-env-protection-rules>
+
+release_and_tagging:
+  # SPEC.md §14.2 notes: no tags in recent log; single long-lived main.
+  versioning_scheme: <TOKEN_TBD::versioning-scheme>
+  release_workflow: <TOKEN_TBD::release-workflow-or-none>
+  rollback_playbook: >
+    Git revert + push to main; pages workflow re-runs and republishes the
+    Jekyll site. All deployable artefacts are static, so rollback is
+    idempotent.
+
+related_adrs:
+  - "DECISIONS/0001-demo-only-no-proprietary-compute.md"
+  - "DECISIONS/0003-pricing-url-conflict.md"
+
+calibration_required:
+  - <TOKEN_TBD::wire-test-workflow>
+  - <TOKEN_TBD::wire-nbconvert-workflow>
+  - <TOKEN_TBD::wire-link-check-workflow>
+  - <TOKEN_TBD::wire-pip-audit-workflow>
+  - <TOKEN_TBD::wire-secret-scan-workflow>
+  - <TOKEN_TBD::wire-notebook-diff-guard>
+  - <TOKEN_TBD::pin-actions-to-sha>
+  - <TOKEN_TBD::top-level-timeout-minutes>
+  - <TOKEN_TBD::pages-env-protection-rules>
+  - <TOKEN_TBD::versioning-scheme>
+  - <TOKEN_TBD::release-workflow-or-none>

@@ -1,0 +1,108 @@
+# policy/access-control.yaml
+# Access control policy for the KASS demonstration repository.
+# Scope: code, docs, workflows, policy/, DECISIONS/.
+# This file is declarative and advisory — no automated enforcement is wired
+# in this repository today. See DECISIONS/0001-demo-only-no-proprietary-compute.md
+# §4 for the constraint that non-KRL contributors cannot fully validate PRs.
+
+version: 1
+repository: KASS
+governance_model: single-branch-main
+evidence:
+  spec: SPEC.md
+  spec_sections:
+    - "SPEC.md §5 (Repository Layout)"
+    - "SPEC.md §14.2 (Branching, Release, Rollback)"
+    - "SPEC.md §16.9 (Single-Branch, No CODEOWNERS)"
+
+branches:
+  default: main
+  protected:
+    main:
+      required_reviews: <TOKEN_TBD::required-reviews-count>
+      dismiss_stale_reviews: <TOKEN_TBD::dismiss-stale-reviews>
+      require_code_owner_reviews: false   # no CODEOWNERS file exists — SPEC.md §16.9
+      required_status_checks:
+        - pages   # the deploy job from .github/workflows/pages.yml
+      enforce_admins: <TOKEN_TBD::enforce-branch-protection-on-admins>
+      restrict_pushes: <TOKEN_TBD::restrict-direct-push-to-main>
+      linear_history: <TOKEN_TBD::require-linear-history>
+
+roles:
+  maintainer:
+    description: >
+      Can merge PRs to main, edit DECISIONS/, edit policy/*.yaml, edit
+      .github/workflows/*.yml. Today this set is the KRL engineering team.
+    members: <TOKEN_TBD::maintainer-members-list>
+    can_merge: true
+    can_edit:
+      - "**/*"
+  contributor:
+    description: >
+      Anyone who opens a PR. Subject to PR-template checklist
+      (.github/PULL_REQUEST_TEMPLATE.md:52-75).
+    members: public
+    can_merge: false
+    can_edit: []   # via PR only; never direct push
+  security_responder:
+    description: >
+      Triages reports sent to security@krlabs.dev per SECURITY.md:27-30.
+    members: <TOKEN_TBD::security-responder-members-list>
+    can_merge: true   # may fast-merge security fixes
+    can_edit:
+      - "SECURITY.md"
+      - ".github/SECURITY.md"
+      - "notebooks/**"
+
+review_requirements:
+  pull_requests:
+    required_approvals: <TOKEN_TBD::pr-required-approvals>
+    approvers_from:
+      - maintainer
+    additional_checklist: ".github/PULL_REQUEST_TEMPLATE.md:52-75"
+    notebook_changes:
+      # From .github/PULL_REQUEST_TEMPLATE.md:52-56
+      must_confirm:
+        - "Notebook runs end-to-end without errors"
+        - "Results match expected output"
+        - "Visualization renders correctly"
+        - "Data connectors work with current API versions"
+        - "Documentation is clear and accurate"
+    policy_changes:
+      # Changes to policy/*.yaml or DECISIONS/*.md
+      requires_adr: true
+      maintainer_approval_required: true
+    workflow_changes:
+      # Changes to .github/workflows/*.yml
+      requires_adr: true
+      maintainer_approval_required: true
+
+decisions_directory:
+  path: DECISIONS/
+  adr_format: "NNNN-kebab-case-title.md"
+  required_sections_count: 7
+  next_number: "0004"    # 0001, 0002, 0003 accounted for
+  amendment_policy: >
+    ADRs are append-only. A superseding ADR MUST reference the predecessor
+    in its "Supersedes" front-matter field; the predecessor gains a
+    "Superseded by" entry in the same PR.
+
+external_access:
+  write: []   # no external write access; all merges via maintainer role
+  github_apps_allowed: <TOKEN_TBD::github-apps-allowlist>
+  # No Dependabot, Renovate, or CodeQL wired today — SPEC.md §11.3, §16.7
+
+related_adrs:
+  - "DECISIONS/0001-demo-only-no-proprietary-compute.md"
+  - "DECISIONS/0003-pricing-url-conflict.md"
+
+calibration_required:
+  - <TOKEN_TBD::required-reviews-count>
+  - <TOKEN_TBD::dismiss-stale-reviews>
+  - <TOKEN_TBD::enforce-branch-protection-on-admins>
+  - <TOKEN_TBD::restrict-direct-push-to-main>
+  - <TOKEN_TBD::require-linear-history>
+  - <TOKEN_TBD::maintainer-members-list>
+  - <TOKEN_TBD::security-responder-members-list>
+  - <TOKEN_TBD::pr-required-approvals>
+  - <TOKEN_TBD::github-apps-allowlist>

@@ -1,0 +1,155 @@
+# policy/dependency.yaml
+# Dependency-surface policy for KASS. Scope: notebook third-party PyPI imports,
+# private krl_* suite, and Jekyll site dependencies.
+# The canonical gap driving this file is the missing requirements.txt —
+# see DECISIONS/0002-missing-requirements-txt-gap.md.
+
+version: 1
+repository: KASS
+
+evidence:
+  spec: SPEC.md
+  spec_sections:
+    - "SPEC.md §3.2 (Dependency Declaration — Absent at Repository Level)"
+    - "SPEC.md §3.3 (Per-Notebook Dependencies)"
+    - "SPEC.md §3.4 (KRL Proprietary Modules)"
+    - "SPEC.md §4 (Dependency Map)"
+    - "SPEC.md §16.1 (Missing requirements.txt)"
+    - "SPEC.md §16.2 (KRL Suite Not Publicly Installable)"
+    - "SPEC.md §16.7 (No Dependency Security Scanning)"
+  adrs:
+    - "DECISIONS/0001-demo-only-no-proprietary-compute.md"
+    - "DECISIONS/0002-missing-requirements-txt-gap.md"
+
+manifests:
+  python:
+    requirements_txt:
+      path: "requirements.txt"
+      exists: false                # SPEC.md §3.2, §16.1
+      referenced_by:
+        - "README.md:38"
+        - "docs/getting-started.md:28-30"
+        - ".github/PULL_REQUEST_TEMPLATE.md:69"
+      status: broken-advert         # users hit ENOENT
+      remediation: <TOKEN_TBD::ship-requirements-txt>
+      owner: <TOKEN_TBD::requirements-txt-owner>
+    pyproject_toml:
+      exists: false
+      rationale: "Repository is not a Python package (SPEC.md §1)."
+    setup_py:
+      exists: false
+    environment_yml:
+      exists: false
+    pipfile:
+      exists: false
+  ruby:
+    gemfile:
+      path: "docs/Gemfile"
+      exists: true
+      lockfile_committed: false    # SPEC.md §6.4 — removed in commit 4f8def8
+      declared_dependencies:
+        - "jekyll ~> 4.3"
+        - "just-the-docs ~> 0.10"
+      evidence: "docs/Gemfile:3-4, SPEC.md §3.1, §7.1"
+
+python_runtime:
+  minimum_version: "3.9"
+  evidence: "README.md:252, CONTRIBUTING.md:30"
+  maximum_version: <TOKEN_TBD::python-maximum-version>
+
+third_party_python_dependencies:
+  # Every package listed here is actually imported by >=1 notebook.
+  # Sourced from SPEC.md §3.3 and §4. Packages named by CONTRIBUTING.md:37
+  # but imported by zero notebooks (statsmodels, econml, causalml) are
+  # catalogued separately below as 'advertised_not_imported'.
+  always_required:
+    - { package: "pandas",        min_version: <TOKEN_TBD::pandas-min>,       used_in: "all 6 notebooks" }
+    - { package: "numpy",         min_version: <TOKEN_TBD::numpy-min>,        used_in: "all 6 notebooks" }
+    - { package: "matplotlib",    min_version: <TOKEN_TBD::matplotlib-min>,   used_in: "all 6 notebooks" }
+    - { package: "seaborn",       min_version: <TOKEN_TBD::seaborn-min>,      used_in: "all 6 notebooks" }
+    - { package: "scipy",         min_version: <TOKEN_TBD::scipy-min>,        used_in: "all 6 notebooks" }
+    - { package: "python-dotenv", min_version: <TOKEN_TBD::dotenv-min>,       used_in: "all 6 notebooks" }
+  almost_always_required:
+    - { package: "scikit-learn",  min_version: <TOKEN_TBD::sklearn-min>, used_in: "5 of 6 (absent standalone NB14 variant)" }
+    - { package: "plotly",        min_version: <TOKEN_TBD::plotly-min>,  used_in: "5 of 6 (absent NB07)" }
+  runtime:
+    - { package: "jupyter",       min_version: <TOKEN_TBD::jupyter-min>, used_in: "notebook execution runtime" }
+    - { package: "jupyterlab",    min_version: <TOKEN_TBD::jupyterlab-min>, used_in: "README.md:253 recommended runtime" }
+
+formatting_tooling:
+  - { package: "black", declared_in: ["README.md:7 badge", "CONTRIBUTING.md:191-193,270"], line_length: 88, enforced_in_ci: false }
+
+advertised_not_imported:
+  # CONTRIBUTING.md:37 lists these as "core dependencies" but no notebook
+  # in this repository imports them. SPEC.md §16.8 flags this drift.
+  - { package: "statsmodels", resolution: <TOKEN_TBD::statsmodels-adopt-or-remove> }
+  - { package: "econml",      resolution: <TOKEN_TBD::econml-adopt-or-remove> }
+  - { package: "causalml",    resolution: <TOKEN_TBD::causalml-adopt-or-remove> }
+
+private_krl_suite:
+  publishability: not-on-public-pypi
+  evidence: "SPEC.md §3.4, §16.2; DECISIONS/0001-demo-only-no-proprietary-compute.md"
+  modules_imported:
+    - { module: "krl_core",             used_in: "all 6 notebooks" }
+    - { module: "krl_data_connectors",  used_in: "all 6 notebooks" }
+    - { module: "krl_models",           used_in: "NB07" }
+    - { module: "krl_enterprise",       used_in: "NB20, NB22" }
+    - { module: "krl_policy",           used_in: "NB11" }
+    - { module: "krl_causal_policy",    used_in: "NB14, NB15" }
+  bootstrap:
+    strategy_env_var: "KRL_DEV_PATH"
+    fallback_behaviour: "attempt pip install of krl-core, krl-data-connectors, krl-causal-policy-toolkit (not on public PyPI)"
+    evidence: "notebooks/causal-inference/14-synthetic-control-policy-lab.ipynb first code cell"
+
+security_scanning:
+  dependabot:           { wired: false, calibration: <TOKEN_TBD::enable-dependabot> }
+  renovate:             { wired: false, calibration: <TOKEN_TBD::enable-renovate> }
+  codeql:               { wired: false, calibration: <TOKEN_TBD::enable-codeql> }
+  pip_audit:            { wired: false, mentioned_in: ".github/SECURITY.md:62 (manual guidance only)" }
+  github_advanced_security: { wired: false }
+  sbom:                 { published: false, format_if_published: <TOKEN_TBD::sbom-format> }
+  evidence: "SPEC.md §11.3, §16.7"
+
+add_dependency_process:
+  when_requirements_txt_exists: >
+    Follow the procedure defined in ADR-0002 §5.2. New packages must be
+    pinned per <TOKEN_TBD::req-txt-pin-strategy> and referenced from at
+    least one notebook import.
+  until_requirements_txt_exists: >
+    Any PR that would add a dependency MUST first supersede (or merge
+    alongside) the file-creation PR that resolves ADR-0002. Adding
+    new imports without a manifest deepens the advertised-vs-actual drift.
+  pr_checklist_item: ".github/PULL_REQUEST_TEMPLATE.md:69"
+
+pinning_strategy: <TOKEN_TBD::req-txt-pin-strategy>
+# Allowed values once chosen:
+#   - floor-only    (pandas>=2.0)
+#   - floor-ceiling (pandas>=2.0,<3.0)
+#   - exact-pin     (pandas==2.2.3) with separate lockfile
+
+related_adrs:
+  - "DECISIONS/0001-demo-only-no-proprietary-compute.md"
+  - "DECISIONS/0002-missing-requirements-txt-gap.md"
+
+calibration_required:
+  - <TOKEN_TBD::ship-requirements-txt>
+  - <TOKEN_TBD::requirements-txt-owner>
+  - <TOKEN_TBD::python-maximum-version>
+  - <TOKEN_TBD::pandas-min>
+  - <TOKEN_TBD::numpy-min>
+  - <TOKEN_TBD::matplotlib-min>
+  - <TOKEN_TBD::seaborn-min>
+  - <TOKEN_TBD::scipy-min>
+  - <TOKEN_TBD::dotenv-min>
+  - <TOKEN_TBD::sklearn-min>
+  - <TOKEN_TBD::plotly-min>
+  - <TOKEN_TBD::jupyter-min>
+  - <TOKEN_TBD::jupyterlab-min>
+  - <TOKEN_TBD::statsmodels-adopt-or-remove>
+  - <TOKEN_TBD::econml-adopt-or-remove>
+  - <TOKEN_TBD::causalml-adopt-or-remove>
+  - <TOKEN_TBD::enable-dependabot>
+  - <TOKEN_TBD::enable-renovate>
+  - <TOKEN_TBD::enable-codeql>
+  - <TOKEN_TBD::sbom-format>
+  - <TOKEN_TBD::req-txt-pin-strategy>
